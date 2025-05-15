@@ -9,3 +9,6 @@ class QA:
     def query(self, question):
         prompt = "Tables in the DB:\n"
         print(prompt,self.dbconn.get_all_table_names())
+
+qa = QA()
+qa.query('')
