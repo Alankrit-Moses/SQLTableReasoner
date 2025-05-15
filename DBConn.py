@@ -6,7 +6,7 @@ class DBConn:
         self.db_path = Path(path)
 
     def get_all_table_names(self):
-        return db.run("SELECT name AS table_names FROM sqlite_master WHERE type='table'")
+        return self.run("SELECT name AS table_names FROM sqlite_master WHERE type='table'")
 
     def _rows_to_str(self, cursor, rows):
         if not rows:
@@ -33,5 +33,5 @@ class DBConn:
         except sqlite3.Error as e:
             return f"SQLite error: {e}"
 
-db = DBConn("/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db")
-print(db.get_all_table_names())
+# db = DBConn("/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db")
+# print(db.get_all_table_names())
