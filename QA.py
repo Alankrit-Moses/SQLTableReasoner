@@ -10,15 +10,19 @@ class QA:
         prompt = "Tables in the DB along with their schema and a few examples:\n\n"
         names = self.dbconn.get_all_table_names()
         for name in names:
+            prompt+='TABLE NAME: '+name+'\n'
             prompt+=self.dbconn.get_table_example(name)+'\n\n'
         prompt+='Narrow down the tables from the aforementioned list of tables can help answer the following question.'+'\n'
         prompt+='Question: '+question
         prompt+='\nGive your output in a json format as such:\n'
         prompt+='{"selected_tables":["name of first relevant table", "name of second relevant table",...,"name of last relevant table"}'
-        prompt+='\nRemember that your output should only contain json and no leading or trailing text, so that I can directly parse the output as a json'
-        # print(prompt)
-        print(self.ollama.query(prompt))
+        prompt+='\nRemember that your output should only contain json and it should not contain any leading or trailing text, such that the output is directly parsable as a json'
+        print(self.ollama.query(prompt)+'\n')
 
 
 qa = QA()
-qa.query('Which country has the highest fuel consumption in 2024.')
+while True:
+    question = input('Input your question')
+    if question=='end':
+        break
+    qa.query('Which country has the highest fuel consumption in 2024.')

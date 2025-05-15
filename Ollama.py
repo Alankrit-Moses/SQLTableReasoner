@@ -1,7 +1,7 @@
 import subprocess
 
 class Ollama:
-    def __init__(self, model='qwen2.5:7b'):
+    def __init__(self, model='qwen3:4b'):
         self.model = model
 
     def query(self, prompt):
