@@ -7,7 +7,7 @@ class DBConn:
 
     def get_all_table_names(self):
         names = self.run("SELECT name AS table_names FROM sqlite_master WHERE type='table'",postprocess=False)
-        return names[0]
+        return [name[0] for name in names]
     
     def get_table_example(self, table_name, top_k=3):
         return self.run("SELECT * FROM "+table_name+" LIMIT "+str(top_k))
