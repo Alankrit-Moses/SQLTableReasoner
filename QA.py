@@ -3,7 +3,7 @@ from Ollama import Ollama
 
 class QA:
     def __init__(self):
-        self.dbconn = DBConn()
+        self.dbconn = DBConn(path='/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db')
         self.ollama = Ollama()
     
     def query(self, question):
