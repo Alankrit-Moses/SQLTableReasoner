@@ -6,7 +6,11 @@ class DBConn:
         self.db_path = Path(path)
 
     def get_all_table_names(self):
-        return self.run("SELECT name AS table_names FROM sqlite_master WHERE type='table'")
+        names = self.run("SELECT name AS table_names FROM sqlite_master WHERE type='table'",postprocess=False)
+        return names[0]
+    
+    def get_table_example(self, table_name, top_k=3):
+        return self.run("SELECT * FROM "+table_name+" LIMIT "+str(top_k))
 
     def _rows_to_str(self, cursor, rows):
         if not rows:
@@ -23,12 +27,14 @@ class DBConn:
         )
         return f"{header}\n{'-' * len(header)}\n{body}"
 
-    def run(self, sql):
+    def run(self, sql, postprocess=True):
         sql = sql.strip().rstrip(";") + ";"
         try:
             with sqlite3.connect(self.db_path) as conn:
                 conn.row_factory = sqlite3.Row
                 cur = conn.execute(sql)
+                if not postprocess:
+                    return cur.fetchall()    
                 return self._rows_to_str(cur, cur.fetchall())
         except sqlite3.Error as e:
             return f"SQLite error: {e}"
