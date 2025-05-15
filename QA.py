@@ -22,7 +22,7 @@ class QA:
 
 qa = QA()
 while True:
-    question = input('Input your question')
+    question = input('Input your question: ')
     if question=='end':
         break
-    qa.query('Which country has the highest fuel consumption in 2024.')
+    qa.query(question)
