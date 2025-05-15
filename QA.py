@@ -16,9 +16,9 @@ class QA:
         prompt+='\nGive your output in a json format as such:\n'
         prompt+='{"selected_tables":["name of first relevant table", "name of second relevant table",...,"name of last relevant table"}'
         prompt+='\nRemember that your output should only contain json and no leading or trailing text, so that I can directly parse the output as a json'
-        print(prompt)
-        # self.ollama.query(prompt)
+        # print(prompt)
+        print(self.ollama.query(prompt))
 
 
 qa = QA()
-qa.query('')
+qa.query('Which country has the highest fuel consumption in 2024.')
