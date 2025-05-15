@@ -5,6 +5,9 @@ class DBConn:
     def __init__(self, path):
         self.db_path = Path(path)
 
+    def get_all_table_names(self):
+        return db.repl("SELECT name AS table_names FROM sqlite_master WHERE type='table'")
+
     def _rows_to_str(self, cursor, rows):
         if not rows:
             return "(no rows)"
@@ -20,7 +23,7 @@ class DBConn:
         )
         return f"{header}\n{'-' * len(header)}\n{body}"
 
-    def run(self, sql: str) -> str:
+    def run(self, sql):
         sql = sql.strip().rstrip(";") + ";"
         try:
             with sqlite3.connect(self.db_path) as conn:
@@ -31,5 +34,4 @@ class DBConn:
             return f"SQLite error: {e}"
 
 db = DBConn("my_database.db")
-# Test
-print(db.repl("SELECT name FROM sqlite_master WHERE type='table'"))
+print(db.get_all_table_names)
