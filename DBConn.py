@@ -34,4 +34,4 @@ class DBConn:
             return f"SQLite error: {e}"
 
 db = DBConn("/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db")
-print(db.get_all_table_names)
+print(db.get_all_table_names())
