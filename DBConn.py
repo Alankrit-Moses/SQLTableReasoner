@@ -42,5 +42,5 @@ class DBConn:
         except sqlite3.Error as e:
             return f"SQLite error: {e}"
 
-db = DBConn("/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db")
-print(db.get_table_info('marine_landings'))
+# db = DBConn("/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db")
+# print(db.get_table_info('marine_landings'))
