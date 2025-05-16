@@ -99,6 +99,7 @@ class QA:
         prompt+= '---END OF EXAMPLES---\n'
         prompt+= 'Actual table to be considered for SQL query:\n\nTable Name to be used in SQL query: '+table_name+'\n'
         prompt+= self.dbconn.get_table_example(table_name)
+        prompt+='\nQuestion: '+question
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
         print(self.ollama.query(prompt))
 
