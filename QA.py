@@ -12,12 +12,10 @@ class QA:
         prompt = '\n'.join(EXAMPLES)
         prompt+= '---END OF EXAMPLES---\n'
         prompt+= 'Actual table to be considered for SQL query:\n\nTable Name to be used in SQL query: '+table_name+'\n'
-        prompt+= self.dbconn.get_table_example(table_name)
+        prompt+= self.dbconn.get_table_info(table_name)
         prompt+='\nQuestion: '+question
         prompt+='\n\n'+error_logs
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
-        prompt+='\n\nIMPORTANT: The table mentioned is not the complete table and the tuples/rows are just the first few selected to explain the schema.'
-        prompt+=' This means that there could be values for these columns that are not present in the example tuples, so dont base the your sql query on the assumption that these values are exhaustive. Only consider the schema.'
         answer = self.ollama.query(prompt)
         print(answer+'\n\n')
         sql_query = answer.split('</think>')[1]

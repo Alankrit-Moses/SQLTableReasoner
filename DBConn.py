@@ -11,6 +11,9 @@ class DBConn:
     
     def get_table_example(self, table_name, top_k=3):
         return self.run("SELECT * FROM "+table_name+" LIMIT "+str(top_k))
+    
+    def get_table_info(self, table_name):
+        return self.run(f"SELECT * FROM pragma_table_info('{table_name}')")
 
     def _rows_to_str(self, cursor, rows):
         if not rows:
@@ -39,5 +42,5 @@ class DBConn:
         except sqlite3.Error as e:
             return f"SQLite error: {e}"
 
-# db = DBConn("/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db")
-# print(db.get_all_table_names())
+db = DBConn("/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db")
+print(db.get_table_info('marine_landings'))
