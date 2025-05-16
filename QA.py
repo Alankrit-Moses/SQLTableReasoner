@@ -17,7 +17,9 @@ class QA:
         prompt+='\n\n'+error_logs
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
         prompt+='\n\nIMPORTANT: The table mentioned is not the complete table and the tuples/rows are just the first few selected to explain the schema.'
+        prompt+=' This means that there could be values for these columns that are not present in the example tuples, so dont base the your sql query on the assumption that these values are exhaustive. Only consider the schema.'
         answer = self.ollama.query(prompt)
+        print(answer+'\n\n')
         sql_query = answer.split('</think>')[1]
         return sql_query.strip()
     
