@@ -19,7 +19,6 @@ class QA:
         if not self.think:
             prompt+='\n/no_think'
         answer = self.ollama.query(prompt)
-        print(answer)
         sql_query = answer.split('</think>')[1]
         return sql_query.strip()
     
