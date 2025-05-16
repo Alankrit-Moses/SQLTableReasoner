@@ -60,7 +60,7 @@ class QA:
         return self.ollama.query(prompt).split('</think>')[1].strip()
 
 # think=True for reasoning
-qa = QA(think=False)
+qa = QA(think=True)
 while True:
     question = 'Did Peru have the highest value in 1997?'
     # question = input('Input your question: ')
