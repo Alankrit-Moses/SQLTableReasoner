@@ -16,10 +16,10 @@ class QA:
         prompt+='\nQuestion: '+question
         prompt+='\n\n'+error_logs
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
-        print(answer)
         if not self.think:
             prompt+='\n/no_think'
         answer = self.ollama.query(prompt)
+        print(answer)
         sql_query = answer.split('</think>')[1]
         return sql_query.strip()
     
