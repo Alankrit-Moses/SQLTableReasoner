@@ -16,6 +16,7 @@ class QA:
         prompt+='\nQuestion: '+question
         prompt+='\n\n'+error_logs
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
+        prompt+='\n\nIMPORTANT: The table mentioned is not the complete table and the tuples/rows are just the first few selected to explain the schema.'
         answer = self.ollama.query(prompt)
         sql_query = answer.split('</think>')[1]
         return sql_query.strip()
