@@ -3,7 +3,7 @@ from Ollama import Ollama
 from constants import SQL_EXAMPLES, ANSWER_EXAMPLES
 
 class QA:
-    def __init__(self):
+    def __init__(self,think=True):
         self.dbconn = DBConn(path='/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db')
         self.ollama = Ollama()
         print(self.dbconn.get_table_example('marine_landings'))
@@ -16,9 +16,14 @@ class QA:
         prompt+='\nQuestion: '+question
         prompt+='\n\n'+error_logs
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
+        if not self.think:
+            prompt+='\n/no_think'
         answer = self.ollama.query(prompt)
         print(answer+'\n\n')
-        sql_query = answer.split('</think>')[1]
+        if self.think:
+           sql_query = answer.split('</think>')[1]
+        else:
+            sql_query = answer
         return sql_query.strip()
     
     def sql_executor(self,question, table_name, max_tries=10):
@@ -40,7 +45,7 @@ class QA:
             result = self.dbconn.run(sql_executed)
         return [sql_executed, final_result]
     
-    def generate_answer(self, question, table_name):
+    def generate_answer(self, question, table_name, think=True):
         prompt = '\n'.join(ANSWER_EXAMPLES)
         prompt+= "Table name: "+table_name
         prompt+= "\n"+self.dbconn.get_table_info(table_name)
@@ -48,11 +53,12 @@ class QA:
         prompt+= '\n\nSQL QUERY: '+sql_results[0]+'\nRESULTS:\n'+sql_results[1]
         prompt+='\n\n Based on the result of the query executed on the aforementioned table, give the answer to the question.'
         prompt+='\nQuestion: '+question
-        print(prompt)
+        if not self.think:
+            prompt+='\n/no_think'
         return self.ollama.query(prompt)
 
         
-qa = QA()
+qa = QA(think=False)
 while True:
     question = input('Input your question: ')
     if question=='end':
