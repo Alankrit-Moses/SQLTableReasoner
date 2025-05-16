@@ -49,7 +49,7 @@ class QA:
         prompt+='\n\n Based on the result of the query executed on the aforementioned table, give the answer to the question.'
         prompt+='\nQuestion: '+question
         print(prompt)
-        return self.ollama.run(prompt)
+        return self.ollama.query(prompt)
 
         
 qa = QA()
