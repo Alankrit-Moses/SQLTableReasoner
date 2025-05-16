@@ -7,7 +7,6 @@ class QA:
         self.dbconn = DBConn(path='/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db')
         self.ollama = Ollama()
         self.think = think
-        print(self.dbconn.get_table_example('marine_landings'))
     
     def sql_extractor(self, question, table_name, error_logs=''):
         prompt = '\n'.join(SQL_EXAMPLES)
@@ -20,7 +19,6 @@ class QA:
         if not self.think:
             prompt+='\n/no_think'
         answer = self.ollama.query(prompt)
-        print(answer+'\n\n')
         sql_query = answer.split('</think>')[1]
         return sql_query.strip()
     
@@ -43,7 +41,7 @@ class QA:
             result = self.dbconn.run(sql_executed)
         return [sql_executed, final_result]
     
-    def generate_answer(self, question, table_name, think=True):
+    def generate_answer(self, question, table_name):
         prompt = '\n'.join(ANSWER_EXAMPLES)
         prompt+= "Table name: "+table_name
         prompt+= "\n"+self.dbconn.get_table_info(table_name)
@@ -53,12 +51,17 @@ class QA:
         prompt+='\nQuestion: '+question
         if not self.think:
             prompt+='\n/no_think'
+        #Printing info before final answer
+        print(table_name)
+        print(self.dbconn.get_table_info(table_name))
+        print('\nSQL QUERY: '+sql_results[0]+'\nRESULTS:\n'+sql_results[1])
         return self.ollama.query(prompt).split('</think>')[1].strip()
 
-        
+# think=True for reasoning
 qa = QA(think=False)
 while True:
-    question = input('Input your question: ')
-    if question=='end':
-        break
+    question = 'Did Peru have the highest value in 1997?'
+    # question = input('Input your question: ')
+    # if question=='end':
+    #     break
     print(qa.generate_answer(question,'marine_landings'))
