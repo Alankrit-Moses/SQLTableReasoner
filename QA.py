@@ -36,7 +36,7 @@ class QA:
                 break
             tries+=1
         if final_result=='':
-            result = self.dbconn.query(sql_executed)
+            result = self.dbconn.run(sql_executed)
         return [sql_executed, final_result]
 
         
