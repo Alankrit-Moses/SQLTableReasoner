@@ -6,6 +6,7 @@ class QA:
     def __init__(self,think=True):
         self.dbconn = DBConn(path='/projects/oecd/oecd-prod-test/oecd-factchecks/OECD_Data.db')
         self.ollama = Ollama()
+        self.think = think
         print(self.dbconn.get_table_example('marine_landings'))
     
     def sql_extractor(self, question, table_name, error_logs=''):
