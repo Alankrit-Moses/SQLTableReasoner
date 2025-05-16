@@ -16,7 +16,8 @@ class QA:
         prompt+='\nQuestion: '+question
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed. Do not produce the think tokens or the <think> block.'
         answer = self.ollama.query(prompt)
-        print(answer)
+        sql_query = answer.split('<\\think>')[1]
+        return sql_query.strip()
 
 
 qa = QA()
@@ -24,4 +25,4 @@ while True:
     question = input('Input your question: ')
     if question=='end':
         break
-    qa.sql_extractor(question,'marine_landings')
+    print(qa.sql_extractor(question,'marine_landings'))
