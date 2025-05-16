@@ -1,23 +1,20 @@
-import requests, json
+import subprocess
 
 class Ollama:
-    def __init__(self, model='qwen3:4b', host='http://localhost:11434'):
+    def __init__(self, model='qwen3:4b'):
         self.model = model
-        self.url   = f"{host}/api/generate"
-        # default to fully-deterministic settings
-        self.default_opts = {"temperature": 0, "top_p": 1, "seed": 42}
 
-    def query(self, prompt: str, **extra_opts) -> str | None:
-        payload = {
-            "model": self.model,
-            "prompt": prompt,
-            "stream": False,
-            **{**self.default_opts, **extra_opts}
-        }
+    def query(self, prompt):
+        command = ["ollama", "run", self.model]
         try:
-            r = requests.post(self.url, json=payload, timeout=300)
-            r.raise_for_status()
-            return r.json()["response"].strip()
-        except (requests.RequestException, KeyError) as e:
-            print("Ollama API error →", e)
+            result = subprocess.run(
+                command,
+                input=prompt,               # send prompt via stdin
+                text=True,                  # auto encode/decode as text
+                capture_output=True,        # capture stdout and stderr
+                check=True                  # raise exception if return code != 0
+            )
+            return result.stdout.strip()
+        except subprocess.CalledProcessError as e:
+            print("Error during subprocess call:", e.stderr.strip())
             return None
