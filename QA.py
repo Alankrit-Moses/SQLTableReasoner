@@ -21,10 +21,7 @@ class QA:
             prompt+='\n/no_think'
         answer = self.ollama.query(prompt)
         print(answer+'\n\n')
-        if self.think:
-           sql_query = answer.split('</think>')[1]
-        else:
-            sql_query = answer
+        sql_query = answer.split('</think>')[1]
         return sql_query.strip()
     
     def sql_executor(self,question, table_name, max_tries=10):
@@ -56,7 +53,7 @@ class QA:
         prompt+='\nQuestion: '+question
         if not self.think:
             prompt+='\n/no_think'
-        return self.ollama.query(prompt)
+        return self.ollama.query(prompt).split('</think>')[1].strip()
 
         
 qa = QA(think=False)
