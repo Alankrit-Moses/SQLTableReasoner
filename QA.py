@@ -17,7 +17,7 @@ class QA:
         prompt+='\n\n'+error_logs
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
         answer = self.ollama.query(prompt)
-        sql_query = answer.split('<\\think>')[1]
+        sql_query = answer.split('</think>')[1]
         return sql_query.strip()
     
     def sql_executor(self,question, table_name, max_tries=10):
