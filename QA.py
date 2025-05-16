@@ -28,7 +28,7 @@ class QA:
         while tries<max_tries:
             sql = self.sql_extractor(question,table_name,error_logs='\n\n'.join(errors) if errors!=[] else '')
             result = self.dbconn.run(sql)
-            if result.contains('error'):
+            if 'error' in result:
                 errors.append('Query tried: '+sql+'\nError: '+result)
             else:
                 final_result = result
