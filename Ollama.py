@@ -1,10 +1,10 @@
 import subprocess
 
 class Ollama:
-    def __init__(self, model='qwen3:4b', temperature=0, top_p=1):
+    def __init__(self, model='qwen3:4b', temperature=0.0, top_p=1.0):
         self.model = model
-        self.temperature=temperature
-        self.top_p=top_p
+        self.temperature=str(temperature)
+        self.top_p=str(top_p)
 
     def query(self, prompt):
         command = ["ollama", "run", "--temperature", self.temperature, "--top-p", self.top_p, self.model]
