@@ -1,6 +1,6 @@
 from DBConn import DBConn
 from Ollama import Ollama
-from constants import EXAMPLES
+from constants import SQL_EXAMPLES, ANSWER_EXAMPLES
 
 class QA:
     def __init__(self):
@@ -9,7 +9,7 @@ class QA:
         print(self.dbconn.get_table_example('marine_landings'))
     
     def sql_extractor(self, question, table_name, error_logs=''):
-        prompt = '\n'.join(EXAMPLES)
+        prompt = '\n'.join(SQL_EXAMPLES)
         prompt+= '---END OF EXAMPLES---\n'
         prompt+= 'Actual table to be considered for SQL query:\n\nTable Name to be used in SQL query: '+table_name+'\n'
         prompt+= self.dbconn.get_table_info(table_name)
@@ -39,13 +39,21 @@ class QA:
         if final_result=='':
             result = self.dbconn.run(sql_executed)
         return [sql_executed, final_result]
+    
+    def generate_answer(self, question, table_name):
+        prompt = '\n'.join(ANSWER_EXAMPLES)
+        prompt+= "Table name: "+table_name
+        prompt+= "\n"+self.dbconn.get_table_info(table_name)
+        sql_results = self.sql_executor(question, table_name)
+        prompt+= '\n\nSQL QUERY: '+sql_results[0]+'\nRESULTS:\n'+sql_results[1]
+        prompt+='\n\n Based on the result of the query executed on the aforementioned table, give the answer to the question.'
+        prompt+='\nQuestion: '+question
+        return self.ollama.run(prompt)
 
         
-
-
 qa = QA()
 while True:
     question = input('Input your question: ')
     if question=='end':
         break
-    print(qa.sql_executor(question,'marine_landings'))
+    print(qa.generate_answer(question,'marine_landings'))
