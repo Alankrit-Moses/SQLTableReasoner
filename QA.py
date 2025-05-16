@@ -14,7 +14,7 @@ class QA:
         prompt+= 'Actual table to be considered for SQL query:\n\nTable Name to be used in SQL query: '+table_name+'\n'
         prompt+= self.dbconn.get_table_info(table_name)
         prompt+= '\n\nA few rows from the table to portray the value types:\n'
-        prompt+= self.dbconn.get_table_example()
+        prompt+= self.dbconn.get_table_example(table_name)
         prompt+='\n\nQuestion: '+question
         prompt+='\n\n'+error_logs
         prompt+='\n\nIMPORTANT: The output should only contain the SQL query, such that it can directly be executed.'
